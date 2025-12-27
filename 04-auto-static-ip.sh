@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 source ./00-common.sh
 
-BASE="$1"
-GATEWAY="$2"
-DNS="$3"
-MIN="$4"
-MAX="$5"
+BASE="192.168.1"
+GATEWAY="192.168.1.1"
+DNS="8.8.8.8,1.1.1.1"
+MIN=2
+MAX=99
 
 log "Applying static IP based on MAC..."
 
