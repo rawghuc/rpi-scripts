@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 source ./00-common.sh
 
-RUN_USER="$1"
+RUN_USER="${SUDO_USER:-}"
 REPO="git@github.com:Innoway-Technologies-OPC-Pvt-Ltd/rpiserver.git"
 BRANCH="deploy-rpi"
 
