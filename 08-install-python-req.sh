@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 source ./00-common.sh
 
-RUN_USER="$1"
+RUN_USER="${SUDO_USER:-}"
 
 REQ_FILE="/home/$RUN_USER/flaskserver/requirements.txt"
 log "Starting... with $RUN_USER"
