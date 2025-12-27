@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 source ./00-common.sh
 
-TS_KEY="$1"
+TS_KEY="tskey-auth-k5AfVvQjR721CNTRL-4it3NMxFSCZS3xc3Ny2oBZCCoTqqYjfz"
 DEVICE_ID=$(cat /tmp/device_id)
 
 curl -fsSL https://tailscale.com/install.sh | sh
