@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 source ./00-common.sh
 
-BACKEND_URL="$1"
+BACKEND_URL="https://add-a-backend-url-here.com"
 
 DEVICE_ID=$(cat /tmp/device_id)
 DEVICE_NAME=$(cat /tmp/device_name)
