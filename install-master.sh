@@ -12,7 +12,7 @@ echo "✔ Module scripts are now executable"
 # ---------------------------
 # Handle arguments
 # ---------------------------
-DEPLOY_KEY="${1:-}"
+# DEPLOY_KEY="${1:-}"
 TAILSCALE_KEY="${2:-}"
 BACKEND_URL="${3:-}"
 
@@ -20,7 +20,7 @@ echo "Starting Master Installer..."
 
 ./01-system-setup.sh
 ./02-disable-services.sh
-./03-install-deploy-key.sh "$DEPLOY_KEY" "pi"
+./03-install-deploy-key.sh "pi"
 ./04-auto-static-ip.sh "192.168.1" "192.168.1.1" "8.8.8.8,1.1.1.1" 2 99
 ./05-identify-device.sh
 ./06-tailscale-setup.sh "$TAILSCALE_KEY"
