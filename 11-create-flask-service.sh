@@ -2,7 +2,7 @@
 set -euo pipefail
 source ./00-common.sh
 
-RUN_USER="$1"
+RUN_USER="${SUDO_USER:-}"
 
 log "Creating flaskserver service for user: $RUN_USER"
 
