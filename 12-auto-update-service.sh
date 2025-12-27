@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 source ./00-common.sh
 
+RUN_USER="${SUDO_USER:-}"
+
 cat >/usr/local/bin/update_flaskserver.sh <<'EOF'
 #!/usr/bin/env bash
-cd /home/pi/flaskserver
+cd /home/$RUN_USER/flaskserver
 git fetch --all
-git reset --hard origin/new-structure-v-1-1
+git reset --hard origin/deploy-rpi
 EOF
 chmod +x /usr/local/bin/update_flaskserver.sh
 
