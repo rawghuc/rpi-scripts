@@ -17,9 +17,7 @@ echo "Disabled services, not installing deploy key..."
 ./03-install-deploy-key.sh
 echo "Installed deploy key, now identifying device..."
 ./05-identify-device.sh
-echo "Identified device, now setting up tailscale..."
-./06-tailscale-setup.sh
-echo "Set up tailscale, now cloning project..."
+echo "Identified device, now cloning project..."
 ./07-clone-project.sh
 echo "Cloned project, now installing python requirements..."
 ./08-install-python-req.sh
@@ -31,7 +29,9 @@ echo "Written config file, now creating flask service..."
 ./11-create-flask-service.sh
 echo "Created flask service, now adding auto update service..."
 ./12-auto-update-service.sh
-echo "Created auto update service, now auto-assigning static ip..."
+echo "Created auto update service, now setting up tailscale..."
+./06-tailscale-setup.sh
+echo "Set up tailscale, now auto-assigning static ip..."
 ./04-auto-static-ip.sh
 
 echo "Done. Now rebooting..."
