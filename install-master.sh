@@ -15,9 +15,7 @@ echo "System setup, now disabling unwanted services..."
 ./02-disable-services.sh
 echo "Disabled services, not installing deploy key..."
 ./03-install-deploy-key.sh
-echo "Installed deploy key, now auto-assigning static ip..."
-./04-auto-static-ip.sh
-echo "Assigned static ip, now identifying device..."
+echo "Installed deploy key, now identifying device..."
 ./05-identify-device.sh
 echo "Identified device, now setting up tailscale..."
 ./06-tailscale-setup.sh
@@ -33,6 +31,8 @@ echo "Written config file, now creating flask service..."
 ./11-create-flask-service.sh
 echo "Created flask service, now adding auto update service..."
 ./12-auto-update-service.sh
+echo "Created auto update service, now auto-assigning static ip..."
+./04-auto-static-ip.sh
 
 echo "Done. Now rebooting..."
 reboot
