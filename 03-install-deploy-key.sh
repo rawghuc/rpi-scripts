@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 source ./00-common.sh
 
 DEPLOY_KEY="-----BEGIN OPENSSH PRIVATE KEY-----
@@ -51,16 +52,76 @@ Q7TbkQJ4hpSj75QVXOR72h2rPUKK8W7y+8/aM8a7ObgDROaYTQQPboVSM26wj/VaULK8HT
 vl9dN1D4/tulAAAAEHJwaXp3LWRlcGxveS1rZXkBAg==
 -----END OPENSSH PRIVATE KEY-----"
 
-# RUN_USER="$2"
 RUN_USER="${SUDO_USER:-}"
 
 echo "Run User: $RUN_USER"
 
-log "Installing deploy key for Git..."
+HOME_DIR="/home/${RUN_USER}"
+SSH_DIR="${HOME_DIR}/.ssh"
+KEY_FILE="${SSH_DIR}/id_rsa"
+KNOWN_HOSTS="${SSH_DIR}/known_hosts"
 
-mkdir -p /home/$RUN_USER/.ssh
-echo "$DEPLOY_KEY" >/home/$RUN_USER/.ssh/id_rsa
-chmod 600 /home/$RUN_USER/.ssh/id_rsa
-chown $RUN_USER:$RUN_USER /home/$RUN_USER/.ssh/id_rsa
+log "Installing Git deploy key for user: ${RUN_USER}"
 
-su - $RUN_USER -c "ssh-keyscan github.com >> ~/.ssh/known_hosts"
+# ---------------------------
+# Sanity checks
+# ---------------------------
+if [ -z "${DEPLOY_KEY:-}" ]; then
+  error "DEPLOY_KEY is not set"
+  exit 1
+fi
+
+if [ ! -d "$HOME_DIR" ]; then
+  error "Home directory ${HOME_DIR} does not exist"
+  exit 1
+fi
+
+# ---------------------------
+# Create .ssh directory securely
+# ---------------------------
+log "Setting up SSH directory"
+
+mkdir -p "$SSH_DIR"
+chmod 700 "$SSH_DIR"
+chown "$RUN_USER:$RUN_USER" "$SSH_DIR"
+
+# ---------------------------
+# Install deploy private key
+# ---------------------------
+log "Writing deploy private key"
+
+echo "$DEPLOY_KEY" > "$KEY_FILE"
+chmod 600 "$KEY_FILE"
+chown "$RUN_USER:$RUN_USER" "$KEY_FILE"
+
+# ---------------------------
+# Add GitHub to known_hosts (SAFE METHOD)
+# ---------------------------
+log "Adding github.com to known_hosts"
+
+su - "$RUN_USER" -c "ssh-keyscan github.com | tee -a ~/.ssh/known_hosts >/dev/null"
+
+chmod 644 "$KNOWN_HOSTS"
+chown "$RUN_USER:$RUN_USER" "$KNOWN_HOSTS"
+
+# ---------------------------
+# Verification: Test SSH auth
+# ---------------------------
+log "Verifying GitHub SSH authentication"
+
+set +e
+SSH_TEST_OUTPUT=$(su - "$RUN_USER" -c "ssh -T git@github.com" 2>&1)
+SSH_TEST_RC=$?
+set -e
+
+if echo "$SSH_TEST_OUTPUT" | grep -q "successfully authenticated"; then
+  log "GitHub SSH authentication verified successfully"
+else
+  error "GitHub SSH authentication failed"
+  echo "---- ssh output ----"
+  echo "$SSH_TEST_OUTPUT"
+  echo "--------------------"
+  exit 1
+fi
+
+log "Deploy key installation completed successfully"
