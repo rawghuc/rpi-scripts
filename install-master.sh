@@ -22,10 +22,16 @@ echo "Identified device, now cloning project..."
 echo "Cloned project, now installing python requirements..."
 ./08-install-python-req.sh
 echo "Installed python requirements, now registering backend..."
-./09-register-backend.sh
-echo "Registered backend, now writing config file..."
-./10-write-config.sh
-echo "Written config file, now creating flask service..."
+
+echo "Tailscale needs to be set up before registering backend and writing config..."
+
+# ./09-register-backend.sh
+# echo "Registered backend, now writing config file..."
+# ./10-write-config.sh
+# echo "Written config file, now creating flask service..."
+
+echo "Skipped backend registration and writing config for now, now creating flask service..."
+
 ./11-create-flask-service.sh
 echo "Created flask service, now adding auto update service..."
 ./12-auto-update-service.sh
