@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 source ./00-common.sh
 
-BACKEND_URL="https://add-a-backend-url-here.com"
+BACKEND_URL="https://parksense.co.in/api/v1/device/test-registration/"
 
 DEVICE_ID=$(cat /tmp/device_id)
 DEVICE_NAME=$(cat /tmp/device_name)
@@ -19,6 +19,8 @@ POST=$(jq -n \
 
 log "Registering with backend: $BACKEND_URL"
 RESP=$(curl -s -X POST -H 'Content-Type: application/json' -d "$POST" "$BACKEND_URL")
+
+echo "Response:\n{$RESP}"
 
 # Extract values
 echo "$RESP" >/tmp/backend_response.json
