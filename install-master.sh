@@ -23,14 +23,10 @@ echo "Cloned project, now installing python requirements..."
 ./08-install-python-req.sh
 echo "Installed python requirements, now registering backend..."
 
-echo "Tailscale needs to be set up before registering backend and writing config..."
+# echo "Tailscale needs to be set up before registering backend and writing config..."
 
-# ./09-register-backend.sh
-# echo "Registered backend, now writing config file..."
-# ./10-write-config.sh
-# echo "Written config file, now creating flask service..."
 
-echo "Skipped backend registration and writing config for now, now creating flask service..."
+# echo "Skipped backend registration and writing config for now, now creating flask service..."
 
 ./11-create-flask-service.sh
 echo "Created flask service, now adding auto update service..."
@@ -39,6 +35,12 @@ echo "Created auto update service, now setting up tailscale..."
 ./06-tailscale-setup.sh
 echo "Set up tailscale, now auto-assigning static ip..."
 ./04-auto-static-ip.sh
+
+
+./09-register-backend.sh
+echo "Registered backend, now writing config file..."
+./10-write-config.sh
+echo "Written config file, now creating flask service..."
 
 echo "Done. Now rebooting..."
 reboot
