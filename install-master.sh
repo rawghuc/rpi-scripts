@@ -12,7 +12,7 @@ echo "Starting Master Installer..."
 
 ./01-system-setup.sh
 echo "System setup, now disabling unwanted services..."
-./02-disable-services.sh
+# ./02-disable-services.sh
 echo "Disabled services, not installing deploy key..."
 ./03-install-deploy-key.sh
 echo "Installed deploy key, now identifying device..."
