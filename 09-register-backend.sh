@@ -17,7 +17,7 @@ POST=$(jq -n \
   --arg serial "$SERIAL" \
   --arg vpn_ip_address "$TS_IP" \
   --arg pl_rpi_local_ip "$LOCAL_IP" \
-  '{device_id:$id,device_name:$name,serial:$serial,tailscale_ip:$ts,local_ip:$local}')
+  '{subpath:$subpath,pl_name:$pl_name,serial:$serial,vpn_ip_address:$vpn_ip_address,pl_rpi_local_ip:$pl_rpi_local_ip}')
 
 log "Registering with backend: $BACKEND_URL"
 RESP=$(curl -s -X POST -H 'Content-Type: application/json' -d "$POST" "$BACKEND_URL")
