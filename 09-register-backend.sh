@@ -1,23 +1,36 @@
 #!/usr/bin/env bash
 source ./00-common.sh
+source /etc/cust_info/cust_info.env
 
-BACKEND_URL="https://parksense.co.in/api/v1/device/test-registration/"
+BACKEND_URL="https://parksense.co.in/api/v1/device/register-pl-rpi/"
 
 DEVICE_ID=$(cat /tmp/device_id)
 DEVICE_NAME=$(cat /tmp/device_name)
 TS_IP=$(cat /tmp/tailscale_ip)
-SERIAL=$(get_serial)
+# SERIAL=$(get_serial)
 LOCAL_IP=$(hostname -I | awk '{print $1}')
 MAC_ADDR=$(cat /sys/class/net/wlan0/address)
 
-POST=$(jq -n \
-  --arg pl_rpi_mac "$MAC_ADDR" \
-  --arg subpath "$DEVICE_ID" \
-  --arg pl_name "$DEVICE_NAME" \
-  --arg serial "$SERIAL" \
-  --arg vpn_ip_address "$TS_IP" \
-  --arg pl_rpi_local_ip "$LOCAL_IP" \
-  '{subpath:$subpath,pl_name:$pl_name,serial:$serial,vpn_ip_address:$vpn_ip_address,pl_rpi_local_ip:$pl_rpi_local_ip}')
+POST='{
+  "cust_id": "'"$CUST_ID"'",
+  "pl_name": "'"$RPI_NAME"'",
+  "description": "'"$RPI_DESC"'",
+  "pl_rpi_mac": "'"$MAC_ADDR"'",
+  "subpath": "'"$SUBPATH"'",
+  "location": "'"$LOCATION"'",
+  "ssh_username": "'"$SSH_USER"'",
+  "ssh_password": "'"$SSH_PASS"'",
+  "vpn_ip_address": "'"$TS_IP"'",
+  "pl_rpi_local_ip": "'"$LOCAL_IP"'"
+}'
+
+#log "Registering with backend: $BACKEND_URL"
+echo "post body: $POST"
+
+RESP=$(curl -s -X POST \
+  -H 'Content-Type: application/json' \
+  -d "$POST" \
+  "$BACKEND_URL")
 
 log "Registering with backend: $BACKEND_URL"
 RESP=$(curl -s -X POST -H 'Content-Type: application/json' -d "$POST" "$BACKEND_URL")
