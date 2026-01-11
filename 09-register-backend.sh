@@ -8,13 +8,15 @@ DEVICE_NAME=$(cat /tmp/device_name)
 TS_IP=$(cat /tmp/tailscale_ip)
 SERIAL=$(get_serial)
 LOCAL_IP=$(hostname -I | awk '{print $1}')
+MAC_ADDR=$(cat /sys/class/net/wlan0/address)
 
 POST=$(jq -n \
-  --arg id "$DEVICE_ID" \
-  --arg name "$DEVICE_NAME" \
+  --arg pl_rpi_mac "$MAC_ADDR" \
+  --arg subpath "$DEVICE_ID" \
+  --arg pl_name "$DEVICE_NAME" \
   --arg serial "$SERIAL" \
-  --arg ts "$TS_IP" \
-  --arg local "$LOCAL_IP" \
+  --arg vpn_ip_address "$TS_IP" \
+  --arg pl_rpi_local_ip "$LOCAL_IP" \
   '{device_id:$id,device_name:$name,serial:$serial,tailscale_ip:$ts,local_ip:$local}')
 
 log "Registering with backend: $BACKEND_URL"
